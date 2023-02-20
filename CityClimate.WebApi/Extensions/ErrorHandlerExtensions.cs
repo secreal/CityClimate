@@ -1,40 +1,48 @@
-﻿namespace CityClimate.WebApi.Extensions;
+﻿using System.Net;
+using CityClimate.Domain.Exceptions;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
-public static class ErrorHandlerExtensions
+namespace CityClimate.WebApi.Extensions
 {
-    public static void UseErrorHandler(this IApplicationBuilder app)
+
+    public static class ErrorHandlerExtensions
     {
-        app.UseExceptionHandler(appError =>
+        public static void UseErrorHandler(this IApplicationBuilder app)
         {
-            appError.Run(async context =>
+            app.UseExceptionHandler(appError =>
             {
-                var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
-                if (contextFeature != null)
+                appError.Run(async context =>
                 {
-                    if (contextFeature.Error is BadRequestException)
-                        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                    else if (contextFeature.Error is NotFoundException)
-                        context.Response.StatusCode = (int)HttpStatusCode.NotFound;
-                    else if (contextFeature.Error is UnauthorizedException)
-                        context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                    else if (contextFeature.Error is ForbiddenException)
-                        context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-                    else
-                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-
-                    context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-                    context.Response.ContentType = "application/json";
-
-                    var response = new
+                    var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
+                    if (contextFeature != null)
                     {
-                        statusCode = context.Response.StatusCode,
-                        message = contextFeature.Error.GetBaseException().Message
-                    };
+                        if (contextFeature.Error is BadRequestException)
+                            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        else if (contextFeature.Error is NotFoundException)
+                            context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                        else if (contextFeature.Error is UnauthorizedException)
+                            context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        else if (contextFeature.Error is ForbiddenException)
+                            context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+                        else
+                            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-                    await context.Response.WriteAsync(JsonConvert.SerializeObject(response));
-                }
+                        context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+                        context.Response.ContentType = "application/json";
+
+                        var response = new
+                        {
+                            statusCode = context.Response.StatusCode,
+                            message = contextFeature.Error.GetBaseException().Message
+                        };
+
+                        await context.Response.WriteAsync(JsonConvert.SerializeObject(response));
+                    }
+                });
             });
-        });
+        }
     }
 }
-

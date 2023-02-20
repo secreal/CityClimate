@@ -1,7 +1,11 @@
-﻿namespace CityClimate.Domain.Exceptions;
+﻿using System;
 
-public class NotFoundException : Exception
+namespace CityClimate.Domain.Exceptions
 {
-    public NotFoundException(string message) : base(message) { }
+    public class NotFoundException : Exception
+    {
+        public NotFoundException(string message) : base(message)
+        {
+        }
+    }
 }
-

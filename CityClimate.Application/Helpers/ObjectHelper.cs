@@ -1,70 +1,75 @@
-﻿namespace CityClimate.Application.Helpers;
+﻿using System;
+using System.Linq;
 
-public static class ObjectHelper
+namespace CityClimate.Application.Helpers
 {
-    public static bool IsEmpty(this object value)
+
+    public static class ObjectHelper
     {
-        if (value == null)
+        public static bool IsEmpty(this object value)
         {
-            return true;
-        }
-
-        if (string.IsNullOrWhiteSpace(value.ToString()))
-        {
-            return true;
-        }
-
-        if (value is DateTime && (DateTime)value == default)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    public static bool IsNotEmpty(this object value)
-    {
-        return !IsEmpty(value);
-    }
-
-    public static int ToInteger(this object value)
-    {
-        try
-        {
-            return Convert.ToInt32(value);
-        }
-        catch
-        {
-            return 0;
-        }
-    }
-
-    public static decimal ToDecimal(this object value)
-    {
-        try
-        {
-            return Convert.ToDecimal(value);
-        }
-        catch
-        {
-            return 0;
-        }
-    }
-
-
-
-    public static void CleanStringProperties(this object model)
-    {
-        var stringProperties = model.GetType().GetProperties().Where(x => x.PropertyType == typeof(string));
-
-        foreach (var property in stringProperties)
-        {
-            var value = property.GetValue(model, null);
-            if (value.IsEmpty())
+            if (value == null)
             {
-                property.SetValue(model, "");
+                return true;
+            }
+
+            if (string.IsNullOrWhiteSpace(value.ToString()))
+            {
+                return true;
+            }
+
+            if (value is DateTime && (DateTime)value == default)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool IsNotEmpty(this object value)
+        {
+            return !IsEmpty(value);
+        }
+
+        public static int ToInteger(this object value)
+        {
+            try
+            {
+                return Convert.ToInt32(value);
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+        public static decimal ToDecimal(this object value)
+        {
+            try
+            {
+                return Convert.ToDecimal(value);
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+
+
+        public static void CleanStringProperties(this object model)
+        {
+            var stringProperties = model.GetType().GetProperties().Where(x => x.PropertyType == typeof(string));
+
+            foreach (var property in stringProperties)
+            {
+                var value = property.GetValue(model, null);
+                if (value.IsEmpty())
+                {
+                    property.SetValue(model, "");
+                }
             }
         }
     }
-}
 
+}

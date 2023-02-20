@@ -1,8 +1,15 @@
-﻿namespace CityClimate.Domain.Exceptions;
+﻿using System;
 
-public class UnauthorizedException : Exception
+namespace CityClimate.Domain.Exceptions
 {
-    public UnauthorizedException() : base("Unauthorized") { }
-    public UnauthorizedException(string message) : base(message) { }
-}
+    public class UnauthorizedException : Exception
+    {
+        public UnauthorizedException() : base("Unauthorized")
+        {
+        }
 
+        public UnauthorizedException(string message) : base(message)
+        {
+        }
+    }
+}

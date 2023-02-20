@@ -1,29 +1,36 @@
-﻿namespace CityClimate.Application.Extensions;
+﻿using System;
+using System.Linq;
 
-public static class ObjectMapperExtensions
+namespace CityClimate.Application.Extensions
 {
-    public static void MapFrom(this object target, object source)
+
+    public static class ObjectMapperExtensions
     {
-        var modelProperties = target.GetType().GetProperties();
-        var sourceProperties = source.GetType().GetProperties();
-
-        foreach (var sourceProperty in sourceProperties)
+        public static void MapFrom(this object target, object source)
         {
-            if (sourceProperty.GetCustomAttributes(true).Any(x => x.GetType().Name == "SkipAttribute"))
-                continue;
+            var modelProperties = target.GetType().GetProperties();
+            var sourceProperties = source.GetType().GetProperties();
 
-            if (modelProperties.Any(x => x.Name == sourceProperty.Name && x.PropertyType == sourceProperty.PropertyType))
+            foreach (var sourceProperty in sourceProperties)
             {
-                var value = sourceProperty.GetValue(source, null);
+                if (sourceProperty.GetCustomAttributes(true).Any(x => x.GetType().Name == "SkipAttribute"))
+                    continue;
 
-                var modelProperty = modelProperties.First(x => x.Name == sourceProperty.Name && x.PropertyType == sourceProperty.PropertyType);
+                if (modelProperties.Any(x => x.Name == sourceProperty.Name && x.PropertyType == sourceProperty.PropertyType))
+                {
+                    var value = sourceProperty.GetValue(source, null);
 
-                modelProperty.SetValue(target, value, null);
+                    var modelProperty = modelProperties.First(x => x.Name == sourceProperty.Name && x.PropertyType == sourceProperty.PropertyType);
+
+                    modelProperty.SetValue(target, value, null);
+                }
             }
         }
     }
+
+    [AttributeUsage(AttributeTargets.Property)]
+    public class SkipAttribute : Attribute
+    {
+    }
+
 }
-
-[AttributeUsage(AttributeTargets.Property)]
-public class SkipAttribute : Attribute { }
-

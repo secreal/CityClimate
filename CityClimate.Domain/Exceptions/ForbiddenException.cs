@@ -1,8 +1,14 @@
-﻿namespace CityClimate.Domain.Exceptions;
+﻿using System;
 
-public class ForbiddenException : Exception
+namespace CityClimate.Domain.Exceptions
 {
-    public ForbiddenException() : base("Forbidden") { }
-    public ForbiddenException(string message) : base(message) { }
+    public class ForbiddenException : Exception
+    {
+        public ForbiddenException() : base("Forbidden")
+        {
+        }
+        public ForbiddenException(string message) : base(message)
+        {
+        }
+    }
 }
-

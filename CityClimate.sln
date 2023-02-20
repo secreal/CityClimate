@@ -9,13 +9,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{1195CB79-C0F2-467D-9C19-82FEED67D8B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CityClimate.Domain", "CityClimate.Domain\CityClimate.Domain.csproj", "{D66245C5-87D3-49EA-98FD-5DB68E9A1009}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CityClimate.Domain", "CityClimate.Domain\CityClimate.Domain.csproj", "{D66245C5-87D3-49EA-98FD-5DB68E9A1009}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CityClimate.Application", "CityClimate.Application\CityClimate.Application.csproj", "{C4B46B1E-D32B-46B1-B493-F95A9F94657B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CityClimate.Application", "CityClimate.Application\CityClimate.Application.csproj", "{C4B46B1E-D32B-46B1-B493-F95A9F94657B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CityClimate.Persistence", "CityClimate.Persistence\CityClimate.Persistence.csproj", "{E71AC9D0-C35E-4250-9E3D-457E26CED711}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CityClimate.Persistence", "CityClimate.Persistence\CityClimate.Persistence.csproj", "{E71AC9D0-C35E-4250-9E3D-457E26CED711}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CityClimate.WebApi", "CityClimate.WebApi\CityClimate.WebApi.csproj", "{B2853674-978B-49F3-8041-58E68D5B7041}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CityClimate.WebApi", "CityClimate.WebApi\CityClimate.WebApi.csproj", "{B2853674-978B-49F3-8041-58E68D5B7041}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CityClimate.OpenWeather", "CityClimate.OpenWeather\CityClimate.OpenWeather.csproj", "{7B63BA5C-69FE-4720-B193-F63D50FBA907}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CityClimate.IsoOrg", "CityClimate.IsoOrg\CityClimate.IsoOrg.csproj", "{3AFD5405-3D76-4009-9DC0-6BF1065E6964}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +43,14 @@ Global
 		{B2853674-978B-49F3-8041-58E68D5B7041}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2853674-978B-49F3-8041-58E68D5B7041}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2853674-978B-49F3-8041-58E68D5B7041}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B63BA5C-69FE-4720-B193-F63D50FBA907}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B63BA5C-69FE-4720-B193-F63D50FBA907}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B63BA5C-69FE-4720-B193-F63D50FBA907}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B63BA5C-69FE-4720-B193-F63D50FBA907}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AFD5405-3D76-4009-9DC0-6BF1065E6964}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AFD5405-3D76-4009-9DC0-6BF1065E6964}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AFD5405-3D76-4009-9DC0-6BF1065E6964}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AFD5405-3D76-4009-9DC0-6BF1065E6964}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,6 +60,8 @@ Global
 		{C4B46B1E-D32B-46B1-B493-F95A9F94657B} = {13A92F28-6F28-496A-802C-1B6FD2CA134C}
 		{E71AC9D0-C35E-4250-9E3D-457E26CED711} = {277A6AC4-AA98-40CF-9E52-4549FCC8FB65}
 		{B2853674-978B-49F3-8041-58E68D5B7041} = {1195CB79-C0F2-467D-9C19-82FEED67D8B5}
+		{7B63BA5C-69FE-4720-B193-F63D50FBA907} = {277A6AC4-AA98-40CF-9E52-4549FCC8FB65}
+		{3AFD5405-3D76-4009-9DC0-6BF1065E6964} = {277A6AC4-AA98-40CF-9E52-4549FCC8FB65}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B5FD6794-ADA8-44A0-868A-F871DD0915E3}

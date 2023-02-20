@@ -1,12 +1,18 @@
-﻿namespace CityClimate.Domain.Exceptions;
+﻿using System;
 
-public class BadRequestException : Exception
+namespace CityClimate.Domain.Exceptions
 {
-    public BadRequestException(string message) : base(message) { }
 
-    public BadRequestException(string messsage, object data) : base(messsage)
+    public class BadRequestException : Exception
     {
-        base.Data.Add("Errors", data);
-    }
-}
+        public BadRequestException(string message) : base(message)
+        {
+        }
 
+        public BadRequestException(string messsage, object data) : base(messsage)
+        {
+            base.Data.Add("Errors", data);
+        }
+    }
+
+}

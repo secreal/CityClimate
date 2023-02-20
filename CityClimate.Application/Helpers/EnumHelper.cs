@@ -1,17 +1,21 @@
-﻿namespace CityClimate.Application.Helpers;
+﻿using System.Collections.Generic;
 
-public static class EnumHelper
+namespace CityClimate.Application.Helpers
 {
-    public static List<string> GetList<T>() where T : class
+
+    public static class EnumHelper
     {
-        var list = new List<string>();
-        var fields = typeof(T).GetFields();
-
-        foreach (var item in fields)
+        public static List<string> GetList<T>() where T : class
         {
-            list.Add(item.GetValue(null).ToString());
-        }
+            var list = new List<string>();
+            var fields = typeof(T).GetFields();
 
-        return list;
+            foreach (var item in fields)
+            {
+                list.Add(item.GetValue(null).ToString());
+            }
+
+            return list;
+        }
     }
 }

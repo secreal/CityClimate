@@ -1,12 +1,25 @@
-﻿namespace CityClimate.WebApi.Extensions;
+﻿using CityClimate.Application.Services;
+using CityClimate.Domain.Interfaces;
+using CityClimate.OpenWeather;
+using CityClimate.Persistence;
+using Microsoft.Extensions.DependencyInjection;
 
-public static class ServiceCollectionExtensions
+namespace CityClimate.WebApi.Extensions
 {
-    public static void AddApplicationServices(this IServiceCollection services)
-    {
-        services.AddScoped<CurrencyService>();
-        services.AddScoped<RoleService>();
-        services.AddScoped<UserService>();
-    }
-}
 
+    public static class ServiceCollectionExtensions
+    {
+        public static void AddRepositories(this IServiceCollection services)
+        {
+            services.AddScoped<ICountryRepository, CountryRepository>();
+            services.AddHttpClient<IClimateRepository, OpenWeatherClient>();
+        }
+
+        public static void AddApplicationServices(this IServiceCollection services)
+        {
+            services.AddScoped<ClimateService>();
+            services.AddScoped<CountryService>();
+        }
+    }
+
+}

@@ -1,67 +1,46 @@
-﻿namespace CityClimate.WebApi.Extensions;
+﻿using System;
+using System.IO;
+using CityClimate.Application.Helpers;
+using CityClimate.Domain.Exceptions;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
-public static class ControllerExtensions
+namespace CityClimate.WebApi.Extensions
 {
-    public static TokenResource GetToken(this ControllerBase controller)
+
+    public static class ControllerExtensions
     {
-        var tokenString = controller.Request.Headers["Token"].ToString();
-        var token = TokenResource.Decode(tokenString);
-        return token;
-    }
-
-    public static TokenResource Authorize(this ControllerBase controller, UserService userService, string privilege = "")
-    {
-        if (!controller.Request.Headers.ContainsKey("Token"))
-            throw new UnauthorizedException("Token not found.");
-
-        var token = controller.GetToken();
-
-        if (token == null)
-            throw new UnauthorizedException("Token invalid.");
-
-        if (token.ExpiredDate < DateTime.Now)
-            throw new UnauthorizedException("Token expired.");
-
-        if (privilege.IsNotEmpty())
+        public static string GetHost(this ControllerBase controller)
         {
-            var privilegeExist = userService.CheckPrivilege(token.UserId, privilege);
-            if (!privilegeExist)
-                throw new ForbiddenException();
+            var host = $"{controller.Request.Scheme}://{controller.Request.Host}{controller.Request.PathBase}";
+
+            return host;
         }
 
-        return token;
-    }
-
-    public static string GetHost(this ControllerBase controller)
-    {
-        var host = $"{controller.Request.Scheme}://{controller.Request.Host}{controller.Request.PathBase}";
-
-        return host;
-    }
-
-    public static string SaveFile(this ControllerBase _, IWebHostEnvironment webHostEnvironment, IFormFile file, string folderName = "upload")
-    {
-        if (file.Length == 0)
-            throw new BadRequestException("File is empty");
-
-        var extension = Path.GetExtension(file.FileName);
-
-        var webRootPath = webHostEnvironment.WebRootPath;
-        if (string.IsNullOrWhiteSpace(webRootPath))
-            webRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
-
-        var newPath = Path.Combine(webRootPath, folderName);
-        if (!Directory.Exists(newPath))
-            Directory.CreateDirectory(newPath);
-
-        string fileName = $"{Guid.NewGuid()}.{extension}";
-        string fullPath = Path.Combine(newPath, fileName);
-        using (var stream = new FileStream(fullPath, FileMode.Create))
+        public static string SaveFile(this ControllerBase _, IWebHostEnvironment webHostEnvironment, IFormFile file, string folderName = "upload")
         {
-            file.CopyTo(stream);
-        }
+            if (file.Length == 0)
+                throw new BadRequestException("File is empty");
 
-        return fullPath;
+            var extension = Path.GetExtension(file.FileName);
+
+            var webRootPath = webHostEnvironment.WebRootPath;
+            if (string.IsNullOrWhiteSpace(webRootPath))
+                webRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+
+            var newPath = Path.Combine(webRootPath, folderName);
+            if (!Directory.Exists(newPath))
+                Directory.CreateDirectory(newPath);
+
+            string fileName = $"{Guid.NewGuid()}.{extension}";
+            string fullPath = Path.Combine(newPath, fileName);
+            using (var stream = new FileStream(fullPath, FileMode.Create))
+            {
+                file.CopyTo(stream);
+            }
+
+            return fullPath;
+        }
     }
 }
-
