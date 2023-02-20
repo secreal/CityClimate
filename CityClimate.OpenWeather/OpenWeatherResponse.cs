@@ -1,43 +1,48 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace CityClimate.OpenWeather
 {
-    internal class OpenWeatherResponse
+    public class GeoCoding
     {
-        public int Cod { get; set; }
+        public string name { get; set; }
+        public double lat { get; set; } = 0;
+        public double lon { get; set; } = 0;
+        public string country { get; set; }
+    }
+    public class OpenWeatherResponse
+    {
         public int Id { get; set; }
-        public DateTime DateTime { get; set; }
         public string Name { get; set; }
-        public double Visibility { get; set; }
-        public CoordinatesResponse Coordinates { get; set; }
-        public SysResponse Sys { get; set; }
-        public MainResponse Main { get; set; }
-        public WindResponse Wind { get; set; }
-        public CloudsResponse Clouds { get; set; }
-        public WeatherResponse Weather { get; set; }
-        public RainResponse Rain { get; set; }
-        public SnowResponse Snow { get; set; }
-
+        public string Base { get; set; }
+        public int Visibility { get; set; }
+        public int Dt { get; set; }
+        public int Timezone { get; set; }
+        public int Cod { get; set; }
+        public Coord Coord { get; set; }
+        public List<Weather> Weather { get; set; }
+        public Main Main { get; set; }
+        public Wind Wind { get; set; }
+        public Clouds Clouds { get; set; }
+        public Sys Sys { get; set; }
         public OpenWeatherResponse()
         {
-            Coordinates = new CoordinatesResponse();
-            Sys = new SysResponse();
-            Main = new MainResponse();
-            Wind = new WindResponse();
-            Clouds = new CloudsResponse();
-            Weather = new WeatherResponse();
-            Rain = new RainResponse();
-            Snow = new SnowResponse();
+            Coord = new Coord();
+            Weather = new List<Weather>();
+            Main = new Main();
+            Wind = new Wind();
+            Clouds = new Clouds();
+            Sys = new Sys();
         }
     }
 
-    internal class CoordinatesResponse
+    public class Coord
     {
-        public double Longitude { get; set; }
-        public double Latitude { get; set; }
+        public double Lon { get; set; }
+        public double Lat { get; set; }
     }
 
-    internal class WeatherResponse
+    public class Weather
     {
         public int Id { get; set; }
         public string Main { get; set; }
@@ -45,51 +50,39 @@ namespace CityClimate.OpenWeather
         public string Icon { get; set; }
     }
 
-    internal class MainResponse
+    public class Main
     {
-        public double Temperature { get; set; }
+        public double Temp { get; set; }
         public double FeelsLike { get; set; }
-        public double TemperatureMin { get; set; }
-        public double TemperatureMax { get; set; }
-        public double Pressure { get; set; }
-        public double Humidity { get; set; }
-        public double SeaLevel { get; set; }
-        public double GroundLevel { get; set; }
+        public double TempMin { get; set; }
+        public double TempMax { get; set; }
+        public int Pressure { get; set; }
+        public int Humidity { get; set; }
+        public int SeaLevel { get; set; }
+        public int GrndLevel { get; set; }
     }
 
-    internal class WindResponse
+    public class Wind
     {
         public double Speed { get; set; }
-        public double Degree { get; set; }
+        public int Deg { get; set; }
         public double Gust { get; set; }
     }
 
-    internal class CloudsResponse
+    public class Clouds
     {
-        public double All { get; set; }
+        public int All { get; set; }
     }
 
-    internal class SysResponse
+    public class Sys
     {
         public int Type { get; set; }
-        public int ID { get; set; }
-        public double Message { get; set; }
+        public int Id { get; set; }
         public string Country { get; set; }
-        public DateTime Sunrise { get; set; }
-        public DateTime Sunset { get; set; }
+        public int Sunrise { get; set; }
+        public int Sunset { get; set; }
     }
 
-    internal class RainResponse
-    {
-        public double OneHour { get; set; }
-        public double ThreeHour { get; set; }
-    }
-
-    internal class SnowResponse
-    {
-        public double OneHour { get; set; }
-        public double ThreeHour { get; set; }
-    }
 
 
 }

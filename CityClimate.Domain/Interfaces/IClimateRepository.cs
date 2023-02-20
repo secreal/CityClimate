@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Text;
+using System.Threading.Tasks;
 using CityClimate.Domain.Entities;
 
 namespace CityClimate.Domain.Interfaces

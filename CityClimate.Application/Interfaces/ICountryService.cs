@@ -8,6 +8,6 @@ namespace CityClimate.Application.Interfaces
     {
         Task<CountryResource> Get(int id);
         Task<List<CountryResource>> GetAll();
-        Task<List<CityResource>> GetAllCity(int countryId);
+        Task<List<CityResource>> GetAllCity(string countryCode);
     }
 }

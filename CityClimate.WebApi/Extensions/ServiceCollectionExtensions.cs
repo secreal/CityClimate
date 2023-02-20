@@ -1,4 +1,5 @@
-﻿using CityClimate.Application.Services;
+﻿using CityClimate.Application.Interfaces;
+using CityClimate.Application.Services;
 using CityClimate.Domain.Interfaces;
 using CityClimate.OpenWeather;
 using CityClimate.Persistence;
@@ -12,13 +13,13 @@ namespace CityClimate.WebApi.Extensions
         public static void AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<ICountryRepository, CountryRepository>();
-            services.AddHttpClient<IClimateRepository, OpenWeatherClient>();
+            services.AddScoped<IClimateRepository, OpenWeatherClient>();
         }
 
         public static void AddApplicationServices(this IServiceCollection services)
         {
-            services.AddScoped<ClimateService>();
-            services.AddScoped<CountryService>();
+            services.AddScoped<IClimateService, ClimateService>();
+            services.AddScoped<ICountryService, CountryService>();
         }
     }
 

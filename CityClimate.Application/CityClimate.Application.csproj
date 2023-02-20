@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CityClimate.Domain\CityClimate.Domain.csproj" />
+    <ProjectReference Include="..\CityClimate.OpenWeather\CityClimate.OpenWeather.csproj" />
   </ItemGroup>
 
 </Project>

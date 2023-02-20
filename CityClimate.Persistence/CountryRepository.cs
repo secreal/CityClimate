@@ -1,28 +1,308 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using CityClimate.Application.Helpers;
 using CityClimate.Domain.Entities;
 using CityClimate.Domain.Interfaces;
+using Flurl.Http;
 
 namespace CityClimate.Persistence
 {
     public class CountryRepository : ICountryRepository
     {
+        static List<CountryEntity> CountryDataSource = new List<CountryEntity>
+        {
+            new CountryEntity { Id = 1, Name = "Afghanistan", Code = "AF" },
+            new CountryEntity { Id = 2, Name = "Åland Islands", Code = "AX" },
+            new CountryEntity { Id = 3, Name = "Albania", Code = "AL" },
+            new CountryEntity { Id = 4, Name = "Algeria", Code = "DZ" },
+            new CountryEntity { Id = 5, Name = "American Samoa", Code = "AS" },
+            new CountryEntity { Id = 6, Name = "Andorra", Code = "AD" },
+            new CountryEntity { Id = 7, Name = "Angola", Code = "AO" },
+            new CountryEntity { Id = 8, Name = "Anguilla", Code = "AI" },
+            new CountryEntity { Id = 9, Name = "Antarctica", Code = "AQ" },
+            new CountryEntity { Id = 10, Name = "Antigua and Barbuda", Code = "AG" },
+            new CountryEntity { Id = 11, Name = "Argentina", Code = "AR" },
+            new CountryEntity { Id = 12, Name = "Armenia", Code = "AM" },
+            new CountryEntity { Id = 13, Name = "Aruba", Code = "AW" },
+            new CountryEntity { Id = 14, Name = "Australia", Code = "AU" },
+            new CountryEntity { Id = 15, Name = "Austria", Code = "AT" },
+            new CountryEntity { Id = 16, Name = "Azerbaijan", Code = "AZ" },
+            new CountryEntity { Id = 17, Name = "Bahrain", Code = "BH" },
+            new CountryEntity { Id = 18, Name = "Bahamas", Code = "BS" },
+            new CountryEntity { Id = 19, Name = "Bangladesh", Code = "BD" },
+            new CountryEntity { Id = 20, Name = "Barbados", Code = "BB" },
+            new CountryEntity { Id = 21, Name = "Belarus", Code = "BY" },
+            new CountryEntity { Id = 22, Name = "Belgium", Code = "BE" },
+            new CountryEntity { Id = 23, Name = "Belize", Code = "BZ" },
+            new CountryEntity { Id = 24, Name = "Benin", Code = "BJ" },
+            new CountryEntity { Id = 25, Name = "Bermuda", Code = "BM" },
+            new CountryEntity { Id = 26, Name = "Bhutan", Code = "BT" },
+            new CountryEntity { Id = 27, Name = "Bolivia, Plurinational State of", Code = "BO" },
+            new CountryEntity { Id = 28, Name = "Bonaire, Sint Eustatius and Saba", Code = "BQ" },
+            new CountryEntity { Id = 29, Name = "Bosnia and Herzegovina", Code = "BA" },
+            new CountryEntity { Id = 30, Name = "Botswana", Code = "BW" },
+            new CountryEntity { Id = 31, Name = "Bouvet Island", Code = "BV" },
+            new CountryEntity { Id = 32, Name = "Brazil", Code = "BR" },
+            new CountryEntity { Id = 33, Name = "British Indian Ocean Territory", Code = "IO" },
+            new CountryEntity { Id = 34, Name = "Brunei Darussalam", Code = "BN" },
+            new CountryEntity { Id = 35, Name = "Bulgaria", Code = "BG" },
+            new CountryEntity { Id = 36, Name = "Burkina Faso", Code = "BF" },
+            new CountryEntity { Id = 37, Name = "Burundi", Code = "BI" },
+            new CountryEntity { Id = 38, Name = "Cambodia", Code = "KH" },
+            new CountryEntity { Id = 39, Name = "Cameroon", Code = "CM" },
+            new CountryEntity { Id = 40, Name = "Canada", Code = "CA" },
+            new CountryEntity { Id = 41, Name = "Cape Verde", Code = "CV" },
+            new CountryEntity { Id = 42, Name = "Cayman Islands", Code = "KY" },
+            new CountryEntity { Id = 43, Name = "Central African Republic", Code = "CF" },
+            new CountryEntity { Id = 44, Name = "Chad", Code = "TD" },
+            new CountryEntity { Id = 45, Name = "Chile", Code = "CL" },
+            new CountryEntity { Id = 46, Name = "China", Code = "CN" },
+            new CountryEntity { Id = 47, Name = "Christmas Island", Code = "CX" },
+            new CountryEntity { Id = 48, Name = "Cocos (Keeling) Islands", Code = "CC" },
+            new CountryEntity { Id = 49, Name = "Colombia", Code = "CO" },
+            new CountryEntity { Id = 50, Name = "Comoros", Code = "KM" },
+            new CountryEntity { Id = 51, Name = "Congo", Code = "CG" },
+            new CountryEntity { Id = 52, Name = "Congo, the Democratic Republic of the", Code = "CD" },
+            new CountryEntity { Id = 53, Name = "Cook Islands", Code = "CK" },
+            new CountryEntity { Id = 54, Name = "Costa Rica", Code = "CR" },
+            new CountryEntity { Id = 55, Name = "Côte d'Ivoire", Code = "CI" },
+            new CountryEntity { Id = 56, Name = "Croatia", Code = "HR" },
+            new CountryEntity { Id = 57, Name = "Cuba", Code = "CU" },
+            new CountryEntity { Id = 58, Name = "Curaçao", Code = "CW" },
+            new CountryEntity { Id = 59, Name = "Cyprus", Code = "CY" },
+            new CountryEntity { Id = 60, Name = "Czech Republic", Code = "CZ" },
+            new CountryEntity { Id = 61, Name = "Denmark", Code = "DK" },
+            new CountryEntity { Id = 62, Name = "Djibouti", Code = "DJ" },
+            new CountryEntity { Id = 63, Name = "Dominica", Code = "DM" },
+            new CountryEntity { Id = 64, Name = "Dominican Republic", Code = "DO" },
+            new CountryEntity { Id = 65, Name = "Ecuador", Code = "EC" },
+            new CountryEntity { Id = 66, Name = "Egypt", Code = "EG" },
+            new CountryEntity { Id = 67, Name = "El Salvador", Code = "SV" },
+            new CountryEntity { Id = 68, Name = "Equatorial Guinea", Code = "GQ" },
+            new CountryEntity { Id = 69, Name = "Eritrea", Code = "ER" },
+            new CountryEntity { Id = 70, Name = "Estonia", Code = "EE" },
+            new CountryEntity { Id = 71, Name = "Ethiopia", Code = "ET" },
+            new CountryEntity { Id = 72, Name = "Falkland Islands (Malvinas)", Code = "FK" },
+            new CountryEntity { Id = 73, Name = "Faroe Islands", Code = "FO" },
+            new CountryEntity { Id = 74, Name = "Fiji", Code = "FJ" },
+            new CountryEntity { Id = 75, Name = "Finland", Code = "FI" },
+            new CountryEntity { Id = 76, Name = "France", Code = "FR" },
+            new CountryEntity { Id = 77, Name = "French Guiana", Code = "GF" },
+            new CountryEntity { Id = 78, Name = "French Polynesia", Code = "PF" },
+            new CountryEntity { Id = 79, Name = "French Southern Territories", Code = "TF" },
+            new CountryEntity { Id = 80, Name = "Gabon", Code = "GA" },
+            new CountryEntity { Id = 81, Name = "Gambia", Code = "GM" },
+            new CountryEntity { Id = 82, Name = "Georgia", Code = "GE" },
+            new CountryEntity { Id = 83, Name = "Germany", Code = "DE" },
+            new CountryEntity { Id = 84, Name = "Ghana", Code = "GH" },
+            new CountryEntity { Id = 85, Name = "Gibraltar", Code = "GI" },
+            new CountryEntity { Id = 86, Name = "Greece", Code = "GR" },
+            new CountryEntity { Id = 87, Name = "Greenland", Code = "GL" },
+            new CountryEntity { Id = 88, Name = "Grenada", Code = "GD" },
+            new CountryEntity { Id = 89, Name = "Guadeloupe", Code = "GP" },
+            new CountryEntity { Id = 90, Name = "Guam", Code = "GU" },
+            new CountryEntity { Id = 91, Name = "Guatemala", Code = "GT" },
+            new CountryEntity { Id = 92, Name = "Guernsey", Code = "GG" },
+            new CountryEntity { Id = 93, Name = "Guinea", Code = "GN" },
+            new CountryEntity { Id = 94, Name = "Guinea-Bissau", Code = "GW" },
+            new CountryEntity { Id = 95, Name = "Guyana", Code = "GY" },
+            new CountryEntity { Id = 96, Name = "Haiti", Code = "HT" },
+            new CountryEntity { Id = 97, Name = "Heard Island and McDonald Islands", Code = "HM" },
+            new CountryEntity { Id = 98, Name = "Holy See (Vatican City State)", Code = "VA" },
+            new CountryEntity { Id = 99, Name = "Honduras", Code = "HN" },
+            new CountryEntity { Id = 100, Name = "Hong Kong", Code = "HK" },
+            new CountryEntity { Id = 101, Name = "Hungary", Code = "HU" },
+            new CountryEntity { Id = 102, Name = "Iceland", Code = "IS" },
+            new CountryEntity { Id = 103, Name = "India", Code = "IN" },
+            new CountryEntity { Id = 104, Name = "Indonesia", Code = "ID" },
+            new CountryEntity { Id = 105, Name = "Iran, Islamic Republic of", Code = "IR" },
+            new CountryEntity { Id = 106, Name = "Iraq", Code = "IQ" },
+            new CountryEntity { Id = 107, Name = "Ireland", Code = "IE" },
+            new CountryEntity { Id = 108, Name = "Isle of Man", Code = "IM" },
+            new CountryEntity { Id = 109, Name = "Israel", Code = "IL" },
+            new CountryEntity { Id = 110, Name = "Italy", Code = "IT" },
+            new CountryEntity { Id = 111, Name = "Jamaica", Code = "JM" },
+            new CountryEntity { Id = 112, Name = "Japan", Code = "JP" },
+            new CountryEntity { Id = 113, Name = "Jersey", Code = "JE" },
+            new CountryEntity { Id = 114, Name = "Jordan", Code = "JO" },
+            new CountryEntity { Id = 115, Name = "Kazakhstan", Code = "KZ" },
+            new CountryEntity { Id = 116, Name = "Kenya", Code = "KE" },
+            new CountryEntity { Id = 117, Name = "Kiribati", Code = "KI" },
+            new CountryEntity { Id = 118, Name = "Korea, Democratic People's Republic of", Code = "KP" },
+            new CountryEntity { Id = 119, Name = "Korea, Republic of", Code = "KR" },
+            new CountryEntity { Id = 120, Name = "Kuwait", Code = "KW" },
+            new CountryEntity { Id = 121, Name = "Kyrgyzstan", Code = "KG" },
+            new CountryEntity { Id = 122, Name = "Lao People's Democratic Republic", Code = "LA" },
+            new CountryEntity { Id = 123, Name = "Latvia", Code = "LV" },
+            new CountryEntity { Id = 124, Name = "Lebanon", Code = "LB" },
+            new CountryEntity { Id = 125, Name = "Lesotho", Code = "LS" },
+            new CountryEntity { Id = 126, Name = "Liberia", Code = "LR" },
+            new CountryEntity { Id = 127, Name = "Libya", Code = "LY" },
+            new CountryEntity { Id = 128, Name = "Liechtenstein", Code = "LI" },
+            new CountryEntity { Id = 129, Name = "Lithuania", Code = "LT" },
+            new CountryEntity { Id = 130, Name = "Luxembourg", Code = "LU" },
+            new CountryEntity { Id = 131, Name = "Macao", Code = "MO" },
+            new CountryEntity { Id = 132, Name = "Macedonia, the Former Yugoslav Republic of", Code = "MK" },
+            new CountryEntity { Id = 133, Name = "Madagascar", Code = "MG" },
+            new CountryEntity { Id = 134, Name = "Malawi", Code = "MW" },
+            new CountryEntity { Id = 135, Name = "Malaysia", Code = "MY" },
+            new CountryEntity { Id = 136, Name = "Maldives", Code = "MV" },
+            new CountryEntity { Id = 137, Name = "Mali", Code = "ML" },
+            new CountryEntity { Id = 138, Name = "Malta", Code = "MT" },
+            new CountryEntity { Id = 139, Name = "Marshall Islands", Code = "MH" },
+            new CountryEntity { Id = 140, Name = "Martinique", Code = "MQ" },
+            new CountryEntity { Id = 141, Name = "Mauritania", Code = "MR" },
+            new CountryEntity { Id = 142, Name = "Mauritius", Code = "MU" },
+            new CountryEntity { Id = 143, Name = "Mayotte", Code = "YT" },
+            new CountryEntity { Id = 144, Name = "Mexico", Code = "MX" },
+            new CountryEntity { Id = 145, Name = "Micronesia, Federated States of", Code = "FM" },
+            new CountryEntity { Id = 146, Name = "Moldova, Republic of", Code = "MD" },
+            new CountryEntity { Id = 147, Name = "Monaco", Code = "MC" },
+            new CountryEntity { Id = 148, Name = "Mongolia", Code = "MN" },
+            new CountryEntity { Id = 149, Name = "Montenegro", Code = "ME" },
+            new CountryEntity { Id = 150, Name = "Montserrat", Code = "MS" },
+            new CountryEntity { Id = 151, Name = "Morocco", Code = "MA" },
+            new CountryEntity { Id = 152, Name = "Mozambique", Code = "MZ" },
+            new CountryEntity { Id = 153, Name = "Myanmar", Code = "MM" },
+            new CountryEntity { Id = 154, Name = "Namibia", Code = "NA" },
+            new CountryEntity { Id = 155, Name = "Nauru", Code = "NR" },
+            new CountryEntity { Id = 156, Name = "Nepal", Code = "NP" },
+            new CountryEntity { Id = 157, Name = "Netherlands", Code = "NL" },
+            new CountryEntity { Id = 158, Name = "New Caledonia", Code = "NC" },
+            new CountryEntity { Id = 159, Name = "New Zealand", Code = "NZ" },
+            new CountryEntity { Id = 160, Name = "Nicaragua", Code = "NI" },
+            new CountryEntity { Id = 161, Name = "Niger", Code = "NE" },
+            new CountryEntity { Id = 162, Name = "Nigeria", Code = "NG" },
+            new CountryEntity { Id = 163, Name = "Niue", Code = "NU" },
+            new CountryEntity { Id = 164, Name = "Norfolk Island", Code = "NF" },
+            new CountryEntity { Id = 165, Name = "Northern Mariana Islands", Code = "MP" },
+            new CountryEntity { Id = 166, Name = "Norway", Code = "NO" },
+            new CountryEntity { Id = 167, Name = "Oman", Code = "OM" },
+            new CountryEntity { Id = 168, Name = "Pakistan", Code = "PK" },
+            new CountryEntity { Id = 169, Name = "Palau", Code = "PW" },
+            new CountryEntity { Id = 170, Name = "Palestine, State of", Code = "PS" },
+            new CountryEntity { Id = 171, Name = "Panama", Code = "PA" },
+            new CountryEntity { Id = 172, Name = "Papua New Guinea", Code = "PG" },
+            new CountryEntity { Id = 173, Name = "Paraguay", Code = "PY" },
+            new CountryEntity { Id = 174, Name = "Peru", Code = "PE" },
+            new CountryEntity { Id = 175, Name = "Philippines", Code = "PH" },
+            new CountryEntity { Id = 176, Name = "Pitcairn", Code = "PN" },
+            new CountryEntity { Id = 177, Name = "Poland", Code = "PL" },
+            new CountryEntity { Id = 178, Name = "Portugal", Code = "PT" },
+            new CountryEntity { Id = 179, Name = "Puerto Rico", Code = "PR" },
+            new CountryEntity { Id = 180, Name = "Qatar", Code = "QA" },
+            new CountryEntity { Id = 181, Name = "Réunion", Code = "RE" },
+            new CountryEntity { Id = 182, Name = "Romania", Code = "RO" },
+            new CountryEntity { Id = 183, Name = "Russian Federation", Code = "RU" },
+            new CountryEntity { Id = 184, Name = "Rwanda", Code = "RW" },
+            new CountryEntity { Id = 185, Name = "Saint Barthélemy", Code = "BL" },
+            new CountryEntity { Id = 186, Name = "Saint Helena, Ascension and Tristan da Cunha", Code = "SH" },
+            new CountryEntity { Id = 187, Name = "Saint Kitts and Nevis", Code = "KN" },
+            new CountryEntity { Id = 188, Name = "Saint Lucia", Code = "LC" },
+            new CountryEntity { Id = 189, Name = "Saint Martin (French part)", Code = "MF" },
+            new CountryEntity { Id = 190, Name = "Saint Pierre and Miquelon", Code = "PM" },
+            new CountryEntity { Id = 191, Name = "Saint Vincent and the Grenadines", Code = "VC" },
+            new CountryEntity { Id = 192, Name = "Samoa", Code = "WS" },
+            new CountryEntity { Id = 193, Name = "San Marino", Code = "SM" },
+            new CountryEntity { Id = 194, Name = "Sao Tome and Principe", Code = "ST" },
+            new CountryEntity { Id = 195, Name = "Saudi Arabia", Code = "SA" },
+            new CountryEntity { Id = 196, Name = "Senegal", Code = "SN" },
+            new CountryEntity { Id = 197, Name = "Serbia", Code = "RS" },
+            new CountryEntity { Id = 198, Name = "Seychelles", Code = "SC" },
+            new CountryEntity { Id = 199, Name = "Sierra Leone", Code = "SL" },
+            new CountryEntity { Id = 200, Name = "Singapore", Code = "SG" },
+            new CountryEntity { Id = 201, Name = "Sint Maarten (Dutch part)", Code = "SX" },
+            new CountryEntity { Id = 202, Name = "Slovakia", Code = "SK" },
+            new CountryEntity { Id = 203, Name = "Slovenia", Code = "SI" },
+            new CountryEntity { Id = 204, Name = "Solomon Islands", Code = "SB" },
+            new CountryEntity { Id = 205, Name = "Somalia", Code = "SO" },
+            new CountryEntity { Id = 206, Name = "South Africa", Code = "ZA" },
+            new CountryEntity { Id = 207, Name = "South Georgia and the South Sandwich Islands", Code = "GS" },
+            new CountryEntity { Id = 208, Name = "South Sudan", Code = "SS" },
+            new CountryEntity { Id = 209, Name = "Spain", Code = "ES" },
+            new CountryEntity { Id = 210, Name = "Sri Lanka", Code = "LK" },
+            new CountryEntity { Id = 211, Name = "Sudan", Code = "SD" },
+            new CountryEntity { Id = 212, Name = "Suriname", Code = "SR" },
+            new CountryEntity { Id = 213, Name = "Svalbard and Jan Mayen", Code = "SJ" },
+            new CountryEntity { Id = 214, Name = "Swaziland", Code = "SZ" },
+            new CountryEntity { Id = 215, Name = "Sweden", Code = "SE" },
+            new CountryEntity { Id = 216, Name = "Switzerland", Code = "CH" },
+            new CountryEntity { Id = 217, Name = "Syrian Arab Republic", Code = "SY" },
+            new CountryEntity { Id = 218, Name = "Taiwan, Province of China", Code = "TW" },
+            new CountryEntity { Id = 219, Name = "Tajikistan", Code = "TJ" },
+            new CountryEntity { Id = 220, Name = "Tanzania, United Republic of", Code = "TZ" },
+            new CountryEntity { Id = 221, Name = "Thailand", Code = "TH" },
+            new CountryEntity { Id = 222, Name = "Timor-Leste", Code = "TL" },
+            new CountryEntity { Id = 223, Name = "Togo", Code = "TG" },
+            new CountryEntity { Id = 224, Name = "Tokelau", Code = "TK" },
+            new CountryEntity { Id = 225, Name = "Tonga", Code = "TO" },
+            new CountryEntity { Id = 226, Name = "Trinidad and Tobago", Code = "TT" },
+            new CountryEntity { Id = 227, Name = "Tunisia", Code = "TN" },
+            new CountryEntity { Id = 228, Name = "Turkey", Code = "TR" },
+            new CountryEntity { Id = 229, Name = "Turkmenistan", Code = "TM" },
+            new CountryEntity { Id = 230, Name = "Turks and Caicos Islands", Code = "TC" },
+            new CountryEntity { Id = 231, Name = "Tuvalu", Code = "TV" },
+            new CountryEntity { Id = 232, Name = "Uganda", Code = "UG" },
+            new CountryEntity { Id = 233, Name = "Ukraine", Code = "UA" },
+            new CountryEntity { Id = 234, Name = "United Arab Emirates", Code = "AE" },
+            new CountryEntity { Id = 235, Name = "United Kingdom", Code = "GB" },
+            new CountryEntity { Id = 236, Name = "United States", Code = "US" },
+            new CountryEntity { Id = 237, Name = "United States Minor Outlying Islands", Code = "UM" },
+            new CountryEntity { Id = 238, Name = "Uruguay", Code = "UY" },
+            new CountryEntity { Id = 239, Name = "Uzbekistan", Code = "UZ" },
+            new CountryEntity { Id = 240, Name = "Vanuatu", Code = "VU" },
+            new CountryEntity { Id = 241, Name = "Venezuela, Bolivarian Republic of", Code = "VE" },
+            new CountryEntity { Id = 242, Name = "Viet Nam", Code = "VN" },
+            new CountryEntity { Id = 243, Name = "Virgin Islands, British", Code = "VG" },
+            new CountryEntity { Id = 244, Name = "Virgin Islands, U.S.", Code = "VI" },
+            new CountryEntity { Id = 245, Name = "Wallis and Futuna", Code = "WF" },
+            new CountryEntity { Id = 246, Name = "Western Sahara", Code = "EH" },
+            new CountryEntity { Id = 247, Name = "Yemen", Code = "YE" },
+            new CountryEntity { Id = 248, Name = "Zambia", Code = "ZM" },
+            new CountryEntity { Id = 249, Name = "Zimbabwe", Code = "ZW" },
+        };
         public CountryEntity Get(int id)
         {
-            var result = new CountryEntity();
+            var result = CountryDataSource.FirstOrDefault(x => x.Id == id);
             return result;
         }
 
         public List<CountryEntity> GetAll()
         {
-            var result = new List<CountryEntity>();
+            var result = CountryDataSource;
             return result;
         }
 
-        public List<CityEntity> GetAllCity(int countryId)
+        public async Task<List<CityEntity>> GetAllCity(string countryCode)
         {
-            var result = new List<CityEntity>();
-            return result;
+            try
+            {
+                /* get city list from api-ninjas.com, limitin 30 city from country */
+                var apikey = "Zze+u0foybH2B4d/KG1Z2g==IV9Iu37rOhoJqEl9";
+                var result = new List<CityEntity>();
+                var listCityNinja = await $@"https://api.api-ninjas.com/v1/city?country={countryCode}&limit=30".WithHeader("X-Api-Key", apikey).GetJsonListAsync();
+                if (listCityNinja != null)
+                {
+                    foreach (var cityNinja in listCityNinja)
+                    {
+                        result.Add(new CityEntity()
+                        {
+                            Id = 0,
+                            Name = cityNinja.name,
+                            CountryCode = cityNinja.country,
+                        });
+                    }
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var errorMessage = ex.Detail();
+                throw new Exception(errorMessage);
+            }
         }
     }
 }

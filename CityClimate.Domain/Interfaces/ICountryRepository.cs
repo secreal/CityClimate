@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using CityClimate.Domain.Entities;
 
 namespace CityClimate.Domain.Interfaces
 {
     public interface ICountryRepository : IBaseRepository<CountryEntity>
     {
-        List<CityEntity> GetAllCity(int countryId);
+        Task<List<CityEntity>> GetAllCity(string countryCode);
     }
 }
