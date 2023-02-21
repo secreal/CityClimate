@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace CityClimate.WebApi.Controllers
 {
     [ApiController]
-    [Route("api/[controller]/[action]")]
     public class CountryController : ControllerBase
     {
         private readonly ICountryService countryService;
@@ -20,6 +19,7 @@ namespace CityClimate.WebApi.Controllers
         }
 
         [HttpGet]
+        [Route("api/[controller]/[action]")]
         public ActionResult<List<CountryResource>> GetAll()
         {
             var result = countryService.GetAll();
@@ -27,6 +27,7 @@ namespace CityClimate.WebApi.Controllers
         }
 
         [HttpGet]
+        [Route("api/[controller]/{id?}/[action]")]
         public ActionResult<CountryResource> Get(int id)
         {
             var result = countryService.Get(id);
@@ -34,7 +35,8 @@ namespace CityClimate.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<CityResource>>> GetAllCity(string countryCode)
+        [Route("api/[controller]/{countryCode?}/[action]")]
+        public async Task<ActionResult<List<CityResource>>> Cities(string countryCode)
         {
             try
             {

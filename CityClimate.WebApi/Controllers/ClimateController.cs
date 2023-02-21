@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace CityClimate.WebApi.Controllers
 {
     [ApiController]
-    [Route("api/[controller]/[action]")]
     public class ClimateController : ControllerBase
     {
         private readonly IClimateService climateService;
@@ -18,6 +17,8 @@ namespace CityClimate.WebApi.Controllers
         }
 
         [HttpGet]
+        [Route("api/[controller]/{city?}/[action]")]
+
         public async Task<ActionResult<ClimateResource>> Get(string city)
         {
             var result = await climateService.Get(city);
