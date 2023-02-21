@@ -57,7 +57,7 @@ namespace CityClimate.OpenWeather
                 result.SkyConditions = openWeather.weather[0].description;
                 result.TemperatureKelvin = openWeather.main.temp;
                 result.DewPoint = openWeather.clouds.all;
-                result.Humidity = openWeather.main.humidity;
+                result.RelativeHumidity = openWeather.main.humidity;
                 result.Pressure = openWeather.main.pressure;
             }
             return result;

@@ -12,7 +12,7 @@ namespace CityClimate.Domain.Entities
         public string SkyConditions { get; set; }
         public double TemperatureKelvin { get; set; }
         public double DewPoint { get; set; }
-        public double Humidity { get; set; }
+        public double RelativeHumidity { get; set; }
         public double Pressure { get; set; }
     }
 }
