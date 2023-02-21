@@ -2,8 +2,8 @@
   <v-container class="py-10">
     <div class="mb-5">
       <h2>Xtramile City Climate</h2>
-      <div v-if="selectedCity != ''">
-        <p class="subtitle-1">Current situation in <u>{{ selectedCity.name }}</u></p>
+      <div v-if="currentCity != null && currentCity.name != null">
+        <p class="subtitle-1">Current situation in <u>{{ currentCity.name }}</u></p>
       </div>
     </div>
     <v-row>
@@ -11,6 +11,7 @@
         <v-card elevation="2">
           <v-card-text>
             <v-combobox
+                v-model="selectedCountry"
                 :items="listCountry"
                 clearable
                 filled
@@ -22,6 +23,7 @@
                 persistent-hint
                 solo
                 @change="countryChosen"
+                @click:clear="clearCountry"
             ></v-combobox>
             <v-combobox
                 v-model="selectedCity"
@@ -52,6 +54,9 @@
                   <div v-if="climate != null && climate.location != null" class="pa-3">
                     <p class="ma-0">{{ climate.location }}</p>
                   </div>
+                  <div v-else class="pa-3">
+                    <p class="ma-0">-</p>
+                  </div>
                 </v-card>
               </v-col>
             </v-row>
@@ -65,6 +70,9 @@
                   <div v-if="climate != null && climate.time != null" class="pa-3">
                     <p class="ma-0">{{ climate.time }}</p>
                   </div>
+                  <div v-else class="pa-3">
+                    <p class="ma-0">-</p>
+                  </div>
                 </v-card>
               </v-col>
 
@@ -76,6 +84,9 @@
                   <div v-if="climate != null && climate.wind != null" class="pa-3">
                     <p class="ma-0">{{ climate.wind }}</p>
                   </div>
+                  <div v-else class="pa-3">
+                    <p class="ma-0">-</p>
+                  </div>
                 </v-card>
               </v-col>
             <v-col cols="12" sm="12" md="4">
@@ -85,6 +96,9 @@
                 </v-card-title>
                 <div v-if="climate != null && climate.visibility != null" class="pa-3">
                   <p class="ma-0">{{ climate.visibility }}</p>
+                </div>
+                <div v-else class="pa-3">
+                  <p class="ma-0">-</p>
                 </div>
               </v-card>
             </v-col>
@@ -101,6 +115,9 @@
                   <div v-if="climate != null && climate.skyConditions != null" class="pa-3">
                     <p class="ma-0">{{ climate.skyConditions }}</p>
                   </div>
+                  <div v-else class="pa-3">
+                    <p class="ma-0">-</p>
+                  </div>
                 </v-card>
               </v-col>
 
@@ -112,6 +129,9 @@
                   <div v-if="climate != null && climate.temperatureCelcius != null" class="pa-3">
                     <p class="ma-0">{{ climate.temperatureCelcius }}</p>
                   </div>
+                  <div v-else class="pa-3">
+                    <p class="ma-0">-</p>
+                  </div>
                 </v-card>
               </v-col>
               <v-col cols="12" sm="12" md="4">
@@ -121,6 +141,9 @@
                   </v-card-title>
                   <div v-if="climate != null && climate.temperatureFahrenheit != null" class="pa-3">
                     <p class="ma-0">{{ climate.temperatureFahrenheit }}</p>
+                  </div>
+                  <div v-else class="pa-3">
+                    <p class="ma-0">-</p>
                   </div>
                 </v-card>
               </v-col>
@@ -137,6 +160,9 @@
                   <div v-if="climate != null && climate.dewPoint != null" class="pa-3">
                     <p class="ma-0">{{ climate.dewPoint }}</p>
                   </div>
+                  <div v-else class="pa-3">
+                    <p class="ma-0">-</p>
+                  </div>
                 </v-card>
               </v-col>
 
@@ -148,6 +174,9 @@
                   <div v-if="climate != null && climate.relativeHumidity != null" class="pa-3">
                     <p class="ma-0">{{ climate.relativeHumidity }}</p>
                   </div>
+                  <div v-else class="pa-3">
+                    <p class="ma-0">-</p>
+                  </div>
                 </v-card>
               </v-col>
             <v-col cols="12" sm="12" md="4">
@@ -157,6 +186,9 @@
                 </v-card-title>
                 <div v-if="climate != null && climate.pressure != null" class="pa-3">
                   <p class="ma-0">{{ climate.pressure }}</p>
+                </div>
+                <div v-else class="pa-3">
+                  <p class="ma-0">-</p>
                 </div>
               </v-card>
             </v-col>
@@ -180,20 +212,35 @@ export default {
   name: "Home",
   data() {
     return {
-      selectedCity: "",
+      selectedCity: '',
+      selectedCountry: '',
+      currentCity: ''
     };
   },
   methods: {
-    async countryChosen(cityCode) {
-      this.storageSave("listCity", await countryApi.getCity(cityCode.code));
+    async clearCountry(){
+      this.selectedCity = '';
+      this.storageSave("listCity", []);
       this.vuexFromStorage("listCity");
-      console.log(this.listCity)
+    },
+    async countryChosen(cityCode) {
+      if(cityCode != null && cityCode.code != null) {
+        var listCity = await countryApi.getCity(cityCode.code)
+        if (listCity.length > 0) {
+          this.storageSave("listCity", listCity);
+          this.vuexFromStorage("listCity");
+        }
+      }
+      this.selectedCity = '';
     },
     async cityChosen(city) {
-      var climate = await climateApi.get(`${city.name},${city.countryCode}`);
-      climate.time = moment(climate.time).format('DD MMMM YYYY, hh:mm A')
-      this.storageSave("climate", climate);
-      this.vuexFromStorage("climate");
+      if(city != null && city.name != null && city.countryCode != null) {
+        var climate = await climateApi.get(`${city.name},${city.countryCode}`);
+        climate.time = moment(climate.time).format('DD MMMM YYYY, hh:mm A')
+        this.storageSave("climate", climate);
+        this.vuexFromStorage("climate");
+        this.currentCity = city
+      }
     }
   },
   async mounted() {
