@@ -11,37 +11,40 @@ namespace CityClimate.Test
     public class ServiceTest
     {
         [Fact]
-        public async void TemperatureConversionTest()
+        public async void FarenheitToCelciusTest()
         {
-            var weatherRepository = new Mock<IClimateRepository>();
+            var climateRepository = new Mock<IClimateRepository>();
 
-            weatherRepository.Setup(x => x.GetClimateByCity("Jakarta"))
+            climateRepository.Setup(x => x.GetClimateByCity("Melbourne"))
                 .ReturnsAsync(new ClimateEntity
                {
-                   TemperatureKelvin = 298.15,
+                   TemperatureKelvin = 295.15,
                });
 
-            var service = new ClimateService(weatherRepository.Object);
-            var weather = await service.Get("Jakarta");
+            var service = new ClimateService(climateRepository.Object);
+            var climate = await service.Get("Melbourne");
 
-            Assert.Equal(25, weather.TemperatureCelcius);
-            Assert.Equal(77, weather.TemperatureFahrenheit);
+            /* Farenheit should be 71.6, ((295.15 - 273.15) * 1.8) + 32 */
+            Assert.Equal(71.6, climate.TemperatureFahrenheit);
+
+            /* Celcius should be 222, 295.15 - 273.15 */
+            Assert.Equal(22, climate.TemperatureCelcius);
         }
 
 
         [Fact]
         public async void CityNotFoundTest()
         {
-            var weatherRepository = new Mock<IClimateRepository>();
+            var climateRepository = new Mock<IClimateRepository>();
 
-            weatherRepository.Setup(x => x.GetClimateByCity("Jakarta"))
+            climateRepository.Setup(x => x.GetClimateByCity("Melbourne"))
                .ReturnsAsync(new ClimateEntity()
                {
-                   Location = "Jakarta",
+                   Location = "Melbourne",
                });
 
-            var service = new ClimateService(weatherRepository.Object);
-            var exception = await Assert.ThrowsAsync<NotFoundException>(async () => await service.Get("Metaverse"));
+            var service = new ClimateService(climateRepository.Object);
+            var exception = await Assert.ThrowsAsync<NotFoundException>(async () => await service.Get("Mondstadt"));
             Assert.Equal("City not found.", exception.Message);
         }
     }

@@ -1,36 +1,36 @@
-﻿
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using CityClimate.Application.Interfaces;
 using CityClimate.Application.Resources;
+using CityClimate.Domain.Entities;
 using CityClimate.Domain.Exceptions;
 using CityClimate.WebApi.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
 
-namespace XtramileWeather.Test
+namespace CityClimate.Test
 {
     public class ControllerTest
     {
         [Fact]
-        public async Task GetAllCountryTest()
+        public void GetAllCountryTest()
         {
             var countryService = new Mock<ICountryService>();
-
-            countryService.Setup(x => x.GetAll())
-                .ReturnsAsync(new List<CountryResource>
+            countryService
+                .Setup(x => x.GetAll())
+                .Returns(
+                    new List<CountryResource>
                 {
-                    new CountryResource { Id = 1, Name = "Indonesia" },
-                    new CountryResource { Id = 2, Name = "Australia" },
+                    new CountryResource { Id = 104, Name = "Indonesia", Code = "ID" },
+                    new CountryResource { Id = 14, Name = "Australia", Code = "AU" },
                 });
 
             var countryController = new CountryController(countryService.Object);
             var actionResult = countryController.GetAll();
+
             var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
             var value = Assert.IsType<List<CountryResource>>(okResult.Value);
-
             Assert.NotNull(value);
             Assert.Equal(2, value.Count);
             Assert.Contains(value, x => x.Name == "Indonesia");
@@ -38,15 +38,15 @@ namespace XtramileWeather.Test
         }
 
         [Fact]
-        public async void CityEmptyTest()
+        public async Task CityEmptyTest()
         {
-            var weatherService = new Mock<IClimateService>();
+            var climateService = new Mock<IClimateService>();
 
-            weatherService.Setup(x => x.Get(""))
-                .ThrowsAsync(new BadRequestException("City cannot be empty."));
+            climateService.Setup(x => x.Get(""))
+                .Throws(new BadRequestException("City cannot be empty."));
 
-            var weatherController = new ClimateController(weatherService.Object);
-            var exception = await Assert.ThrowsAsync<BadRequestException>(async () => await weatherController.Get(""));
+            var climateController = new ClimateController(climateService.Object);
+            var exception = await Assert.ThrowsAsync<BadRequestException>(async () => await climateController.Get(""));
             Assert.Equal("City cannot be empty.", exception.Message);
         }
     }

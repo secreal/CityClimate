@@ -17,11 +17,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CityClimate.Persistence", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CityClimate.WebApi", "CityClimate.WebApi\CityClimate.WebApi.csproj", "{B2853674-978B-49F3-8041-58E68D5B7041}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CityClimate.OpenWeather", "CityClimate.OpenWeather\CityClimate.OpenWeather.csproj", "{7B63BA5C-69FE-4720-B193-F63D50FBA907}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CityClimate.OpenWeather", "CityClimate.OpenWeather\CityClimate.OpenWeather.csproj", "{7B63BA5C-69FE-4720-B193-F63D50FBA907}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{34699BAA-11F5-442E-AAA3-C1AC868A8B07}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CityClimate.Test", "CityClimate.Test\CityClimate.Test.csproj", "{E4BAA437-E7CB-42B0-A193-C57BA0E79E02}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CityClimate.Test", "CityClimate.Test\CityClimate.Test.csproj", "{6941AC38-0A49-4528-9349-3702E9E50037}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,10 +49,10 @@ Global
 		{7B63BA5C-69FE-4720-B193-F63D50FBA907}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B63BA5C-69FE-4720-B193-F63D50FBA907}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B63BA5C-69FE-4720-B193-F63D50FBA907}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E4BAA437-E7CB-42B0-A193-C57BA0E79E02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E4BAA437-E7CB-42B0-A193-C57BA0E79E02}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E4BAA437-E7CB-42B0-A193-C57BA0E79E02}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E4BAA437-E7CB-42B0-A193-C57BA0E79E02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6941AC38-0A49-4528-9349-3702E9E50037}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6941AC38-0A49-4528-9349-3702E9E50037}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6941AC38-0A49-4528-9349-3702E9E50037}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6941AC38-0A49-4528-9349-3702E9E50037}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -63,7 +63,7 @@ Global
 		{E71AC9D0-C35E-4250-9E3D-457E26CED711} = {277A6AC4-AA98-40CF-9E52-4549FCC8FB65}
 		{B2853674-978B-49F3-8041-58E68D5B7041} = {1195CB79-C0F2-467D-9C19-82FEED67D8B5}
 		{7B63BA5C-69FE-4720-B193-F63D50FBA907} = {277A6AC4-AA98-40CF-9E52-4549FCC8FB65}
-		{E4BAA437-E7CB-42B0-A193-C57BA0E79E02} = {34699BAA-11F5-442E-AAA3-C1AC868A8B07}
+		{6941AC38-0A49-4528-9349-3702E9E50037} = {34699BAA-11F5-442E-AAA3-C1AC868A8B07}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B5FD6794-ADA8-44A0-868A-F871DD0915E3}

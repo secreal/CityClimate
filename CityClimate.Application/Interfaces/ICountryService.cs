@@ -7,7 +7,7 @@ namespace CityClimate.Application.Interfaces
     public interface ICountryService
     {
         Task<CountryResource> Get(int id);
-        Task<List<CountryResource>> GetAll();
+        List<CountryResource> GetAll();
         Task<List<CityResource>> GetAllCity(string countryCode);
     }
 }

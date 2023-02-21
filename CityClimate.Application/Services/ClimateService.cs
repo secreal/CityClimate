@@ -20,9 +20,27 @@ namespace CityClimate.Application.Services
         public async Task<ClimateResource> Get(string city)
         {
             var result = new ClimateResource();
+            if (string.IsNullOrEmpty(city))
+                throw new BadRequestException("City cannot be empty.");
+
             var entity = await climateRepository.GetClimateByCity(city);
+            if (entity == null)
+                throw new NotFoundException("City not found.");
+
             result.MapFrom(entity);
+            result.TemperatureCelcius = ConvertTempTCelcius(entity.TemperatureKelvin);
+            result.TemperatureFahrenheit = ConvertTempToFarenheit(entity.TemperatureKelvin);
             return result;
+        }
+
+        private double ConvertTempTCelcius(double temp)
+        {
+            return temp - 273.15;
+        }
+
+        private double ConvertTempToFarenheit(double temp)
+        {
+            return ((temp - 273.15) * 1.8) + 32;
         }
 
     }

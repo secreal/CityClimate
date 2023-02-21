@@ -26,7 +26,7 @@ namespace CityClimate.Application.Services
             return result;
         }
 
-        public async Task<List<CountryResource>> GetAll()
+        public List<CountryResource> GetAll()
         {
             var result = new List<CountryResource>();
             result.MapFrom(countryRepository.GetAll());
@@ -53,7 +53,7 @@ namespace CityClimate.Application.Services
             catch (Exception ex)
             {
                 var errorDetail = ex.Detail();
-                throw new Exception(errorDetail);
+                throw new Exception("Our Server connection is currently down.");
             }
         }
     }
