@@ -26,14 +26,19 @@ namespace CityClimate.OpenWeather
         private async Task<GeoCoding> GetGeoCoding(string city)
         {
             var result = new GeoCoding();
-            var listGeoCoding = await $@"http://api.openweathermap.org/geo/1.0/direct?q={city}&appid={apikey}".GetJsonListAsync();
-            var geoCoding = listGeoCoding.FirstOrDefault();
-            if (geoCoding != null)
+            using (var client = new FlurlClient($@"http://api.openweathermap.org"))
             {
-                result.name = geoCoding.name;
-                result.lat = geoCoding.lat;
-                result.lon = geoCoding.lon;
-                result.country = geoCoding.country;
+                var listGeoCoding = await $@"http://api.openweathermap.org/geo/1.0/direct?q={city}&appid={apikey}"
+                    .WithClient(client)
+                    .GetJsonListAsync();
+                var geoCoding = listGeoCoding.FirstOrDefault();
+                if (geoCoding != null)
+                {
+                    result.name = geoCoding.name;
+                    result.lat = geoCoding.lat;
+                    result.lon = geoCoding.lon;
+                    result.country = geoCoding.country;
+                }
             }
             return result;
         }
@@ -45,7 +50,7 @@ namespace CityClimate.OpenWeather
             if (openWeather != null)
             {
                 result.Location = openWeather.name;
-                result.Time = new DateTime(openWeather.dt);
+                result.Time = DateTime.UnixEpoch.AddSeconds(openWeather.dt);
                 result.Wind = openWeather.wind.speed;
                 result.Visibility = openWeather.visibility;
                 result.WeatherCondition = openWeather.weather[0].main;

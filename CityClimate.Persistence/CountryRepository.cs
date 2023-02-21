@@ -282,20 +282,24 @@ namespace CityClimate.Persistence
                 /* get city list from api-ninjas.com, limitin 30 city from country */
                 var apikey = "Zze+u0foybH2B4d/KG1Z2g==IV9Iu37rOhoJqEl9";
                 var result = new List<CityEntity>();
-                var listCityNinja = await $@"https://api.api-ninjas.com/v1/city?country={countryCode}&limit=30".WithHeader("X-Api-Key", apikey).GetJsonListAsync();
-                if (listCityNinja != null)
+                using (var client = new FlurlClient($@"https://api.api-ninjas.com"))
                 {
-                    foreach (var cityNinja in listCityNinja)
+                    var listCityNinja = await $@"https://api.api-ninjas.com/v1/city?country={countryCode}&limit=30"
+                        .WithClient(client)
+                        .WithHeader("X-Api-Key", apikey).GetJsonListAsync();
+                    if (listCityNinja != null)
                     {
-                        result.Add(new CityEntity()
+                        foreach (var cityNinja in listCityNinja)
                         {
-                            Id = 0,
-                            Name = cityNinja.name,
-                            CountryCode = cityNinja.country,
-                        });
+                            result.Add(new CityEntity()
+                            {
+                                Id = 0,
+                                Name = cityNinja.name,
+                                CountryCode = cityNinja.country,
+                            });
+                        }
                     }
                 }
-
                 return result;
             }
             catch (Exception ex)

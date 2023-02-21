@@ -19,13 +19,14 @@ export default {
   },
 
   computed: {
-    identity() {
-    },
   },
 
   async mounted() {
   },
 
   methods: {},
+  theme: {
+    defaultTheme: 'dark'
+  }
 };
 </script>

@@ -1,7 +1,13 @@
 import XLSX from "xlsx";
+import store from "@/store";
 
 export default {
     methods: {
+        vuexFromStorage(key) {
+            store.commit(`base/${key}`, this.storageLoad(key) ?? "");
+            // console.log(key)
+            // console.log(this.storageLoad(key))
+        },        
         getErrorMessage(error) {
             if (error?.response?.data?.message) return error?.response?.data?.message;
             else if (error?.message) return error?.message;
@@ -51,7 +57,7 @@ export default {
 
         encryptString(text) {
             if (!text) return "";
-            const x = btoa(text);
+            const x = btoa(unescape(encodeURIComponent(text)));
             const y = x.split("").reverse().join("");
             const z = btoa(y);
             return z;
@@ -59,7 +65,7 @@ export default {
 
         decryptString(text) {
             if (!text) return "";
-            const z = atob(text);
+            const z = decodeURIComponent(escape(atob(text)));
             const y = z.split("").reverse().join("");
             const x = atob(y);
             return x;
@@ -67,17 +73,17 @@ export default {
 
         storageSave(key, value) {
             const json = JSON.stringify(value);
-            const encryptedValue = this.encryptString(json);
-            const encryptedKey = this.encryptString(key);
-            localStorage.setItem(encryptedKey, encryptedValue);
+            // const encryptedValue = this.encryptString(json);
+            // const encryptedKey = this.encryptString(key);
+            localStorage.setItem(key, json);
         },
 
         storageLoad(key) {
             try {
-                const encryptedKey = this.encryptString(key);
-                const encryptedValue = localStorage.getItem(encryptedKey);
-                const json = this.decryptString(encryptedValue);
-                return JSON.parse(json);
+                // const encryptedKey = this.encryptString(key);
+                // const encryptedValue = localStorage.getItem(key);
+                // const json = this.decryptString(encryptedValue);
+                return JSON.parse(localStorage.getItem(key));
             } catch {
                 return null;
             }

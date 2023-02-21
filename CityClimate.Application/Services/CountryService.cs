@@ -28,8 +28,13 @@ namespace CityClimate.Application.Services
 
         public List<CountryResource> GetAll()
         {
-            var result = new List<CountryResource>();
-            result.MapFrom(countryRepository.GetAll());
+            var result = countryRepository.GetAll()
+                .Select(x => new CountryResource
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Code = x.Code,
+                }).ToList();
             return result;
         }
 
@@ -37,17 +42,13 @@ namespace CityClimate.Application.Services
         {
             try
             {
-                var result = new List<CityResource>();
-                var listCity = await countryRepository.GetAllCity(countryCode);
-                foreach (var city in listCity)
-                {
-                    result.Add(new CityResource()
+                var result = (await countryRepository.GetAllCity(countryCode))
+                    .Select(x => new CityResource
                     {
-                        CountryCode = city.CountryCode,
-                        Name = city.Name,
-                        Id = city.Id
-                    });
-                }
+                        Id = x.Id,
+                        Name = x.Name,
+                        CountryCode = x.CountryCode
+                    }).ToList();
                 return result;
             }
             catch (Exception ex)

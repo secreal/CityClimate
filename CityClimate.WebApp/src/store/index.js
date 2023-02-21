@@ -1,14 +1,12 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import AuthModule from "./modules/AuthModule";
-import FilterModule from "./modules/FilterModule";
+import BaseModule from "./modules/BaseModule";
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
     modules: {
-        auth: AuthModule,
-        filter: FilterModule
+        base: BaseModule
     }
 });
 

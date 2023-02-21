@@ -9,16 +9,7 @@ const http = axios.create({
 });
 
 http.interceptors.request.use(request => {
-    let identity = store.getters["auth/identity"];
-    
-    if (!identity) {
-        identity = mixin.methods.storageLoad("identity");
-        store.commit("auth/identity", identity);
-    }
 
-    if (identity)
-        request.headers.Authorization = `Bearer ${identity.accessToken}`;
-    
     return request;
 });
 
