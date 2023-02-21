@@ -1,4 +1,4 @@
-# fsm
+# CityClimate Vue 2
 
 ## Project setup
 ```

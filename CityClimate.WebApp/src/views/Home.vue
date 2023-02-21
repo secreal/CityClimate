@@ -7,7 +7,7 @@
       </div>
     </div>
     <v-row>
-      <v-col md="4">
+      <v-col cols="12" sm="12" md="4" >
         <v-card elevation="2">
           <v-card-text>
             <v-combobox
@@ -40,11 +40,11 @@
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col md="8">
+      <v-col cols="12" sm="12" md="8">
         <v-card elevation="2">
           <v-card-text>
             <v-row>
-              <v-col md="12">
+              <v-col cols="12" sm="12" md="12">
                 <v-card class="box" outlined>
                   <v-card-title class="pa-3 pb-0 text-center">
                     Location
@@ -57,7 +57,7 @@
             </v-row>
             <v-row>
 
-              <v-col md="4">
+              <v-col cols="12" sm="12" md="4">
                 <v-card class="box" outlined>
                   <v-card-title class="pa-3 pb-0">
                     Time
@@ -68,7 +68,7 @@
                 </v-card>
               </v-col>
 
-              <v-col md="4">
+              <v-col cols="12" sm="12" md="4">
                 <v-card class="box" outlined>
                   <v-card-title class="pa-3 pb-0">
                     Wind
@@ -78,7 +78,7 @@
                   </div>
                 </v-card>
               </v-col>
-            <v-col md="4">
+            <v-col cols="12" sm="12" md="4">
               <v-card class="box" outlined>
                 <v-card-title class="pa-3 pb-0">
                   Visibility
@@ -93,7 +93,7 @@
             <v-row>
 
 
-              <v-col md="4">
+              <v-col cols="12" sm="12" md="4">
                 <v-card class="box" outlined>
                   <v-card-title class="pa-3 pb-0">
                     Sky Conditions
@@ -104,7 +104,7 @@
                 </v-card>
               </v-col>
 
-              <v-col md="4">
+              <v-col cols="12" sm="12" md="4">
                 <v-card class="box" outlined>
                   <v-card-title class="pa-3 pb-0">
                     Temp (C)
@@ -114,7 +114,7 @@
                   </div>
                 </v-card>
               </v-col>
-              <v-col md="4">
+              <v-col cols="12" sm="12" md="4">
                 <v-card class="box" outlined>
                   <v-card-title class="pa-3 pb-0">
                     Temp (F)
@@ -129,7 +129,7 @@
             <v-row>
 
 
-              <v-col md="4">
+              <v-col cols="12" sm="12" md="4">
                 <v-card class="box" outlined>
                   <v-card-title class="pa-3 pb-0">
                     Dew Point
@@ -140,7 +140,7 @@
                 </v-card>
               </v-col>
 
-              <v-col md="4">
+              <v-col cols="12" sm="12" md="4">
                 <v-card class="box" outlined>
                   <v-card-title class="pa-3 pb-0">
                     Relative Humidity
@@ -150,7 +150,7 @@
                   </div>
                 </v-card>
               </v-col>
-            <v-col md="4">
+            <v-col cols="12" sm="12" md="4">
               <v-card class="box" outlined>
                 <v-card-title class="pa-3 pb-0">
                   Pressure
@@ -192,8 +192,6 @@ export default {
     async cityChosen(city) {
       var climate = await climateApi.get(`${city.name},${city.countryCode}`);
       climate.time = moment(climate.time).format('DD MMMM YYYY, hh:mm A')
-      climate.temperatureFahrenheit = climate.temperatureFahrenheit.toFixed(2)
-      climate.temperatureCelcius = climate.temperatureCelcius.toFixed(2)
       this.storageSave("climate", climate);
       this.vuexFromStorage("climate");
     }
@@ -201,22 +199,6 @@ export default {
   async mounted() {
     this.storageSave("listCountry", await countryApi.getAll());
     this.vuexFromStorage("listCountry");
-    if (this.climate == null) {
-      var emptyClimate = {
-        dewPoint: "",
-        location: "",
-        pressure: "",
-        relativeHumidity: "",
-        skyConditions: "",
-        temperatureCelcius: "",
-        temperatureFahrenheit: "",
-        time: "",
-        visibility: "",
-        wind: "",
-      };
-      this.storageSave("climate", emptyClimate);
-      this.vuexFromStorage("climate");
-    }
   },
   computed: {
     ...mapGetters({

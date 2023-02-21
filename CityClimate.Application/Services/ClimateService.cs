@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using CityClimate.Application.Extensions;
 using CityClimate.Application.Interfaces;
 using CityClimate.Application.Resources;
@@ -28,8 +29,8 @@ namespace CityClimate.Application.Services
                 throw new NotFoundException("City not found.");
 
             result.MapFrom(entity);
-            result.TemperatureCelcius = ConvertTempTCelcius(entity.TemperatureKelvin);
-            result.TemperatureFahrenheit = ConvertTempToFarenheit(entity.TemperatureKelvin);
+            result.TemperatureCelcius = Math.Round(ConvertTempTCelcius(entity.TemperatureKelvin), 2);
+            result.TemperatureFahrenheit = Math.Round(ConvertTempToFarenheit(entity.TemperatureKelvin), 2);
             return result;
         }
 
